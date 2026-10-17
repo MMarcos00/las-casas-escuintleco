@@ -8,7 +8,7 @@ export const suma = (a, f) => a.reduce((s, x) => s + f(x), 0);
 const ahora = () => new Date().toISOString();
 
 // Dirección pública del sitio (cámbiela por la suya). En GitHub Pages se detecta sola.
-export const URL_PUBLICA = 'https://TU-USUARIO.github.io/las-casas-escuintleco/';
+export const URL_PUBLICA = 'https://mmarcos00.github.io/las-casas-escuintleco/';
 const base = () => location.hostname.endsWith('github.io') ? new URL('.', location.href).href : URL_PUBLICA;
 
 // ---- Total en letras ----
