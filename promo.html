@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tu promoción · Las Casas del Escuintleco</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body { min-height: 100vh; margin: 0; display: flex; align-items: center; justify-content: center; padding: 1rem;
+            font-family: 'Segoe UI', system-ui, sans-serif; background: linear-gradient(135deg, #5e2b59, #9a4f93, #c0659f); background-size: 200% 200%; animation: fondo 12s ease infinite; }
+        @keyframes fondo { 0%, 100% { background-position: 0 50%; } 50% { background-position: 100% 50%; } }
+        .ticket { width: 100%; max-width: 400px; background: #fff; border-radius: 1.2rem; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, .35); animation: aparecer .7s cubic-bezier(.2, .8, .2, 1); }
+        @keyframes aparecer { from { opacity: 0; transform: translateY(40px) scale(.94); } to { opacity: 1; transform: none; } }
+        .cabeza { background: #9a4f93; color: #fff; text-align: center; padding: 1.2rem; }
+        .icono { font-size: 4.5rem; color: #9a4f93; display: inline-block; animation: salto 1.6s ease-in-out infinite; }
+        @keyframes salto { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-12px) rotate(4deg); } }
+        .corte { border-top: 2px dashed #cdb5cb; margin: 0 1rem; }
+        .pasos li { margin-bottom: .4rem; }
+        .vencida { filter: grayscale(1); opacity: .8; }
+    </style>
+</head>
+<body>
+<div class="ticket" id="ticket"></div>
+<script>
+    const p = new URLSearchParams(location.search);
+    const TIPOS = {
+        GRATIS: ['bi-gift-fill', 'Producto gratuito'], VALE: ['bi-ticket-perforated-fill', 'Vale de regalo'],
+        '2DO_MITAD': ['bi-percent', 'Segundo a mitad de precio'], MAYOREO: ['bi-boxes', 'Precio de mayoreo'],
+        PUNTOS: ['bi-stars', 'Puntos para tu próxima compra']
+    };
+    const t = document.getElementById('ticket'), info = TIPOS[p.get('t')];
+
+    if (!info || !p.get('f')) {
+        t.innerHTML = `<div class="p-5 text-center"><i class="bi bi-qr-code-scan display-3 text-secondary"></i>
+      <h4 class="mt-3">Código no válido</h4><p class="text-muted">Escanea el código QR de una factura de Las Casas del Escuintleco.</p></div>`;
+    } else {
+        const vence = new Date(p.get('e') + 'T23:59:59'), vencida = vence < new Date();
+        t.innerHTML = `
+      <div class="cabeza"><div class="small opacity-75">LAS CASAS DEL ESCUINTLECO</div><h5 class="m-0">¡Tienes una promoción!</h5></div>
+      <div class="p-4 text-center ${vencida ? 'vencida' : ''}">
+        <i class="bi ${info[0]} icono"></i>
+        <div class="badge bg-success mt-2" id="tipo"></div>
+        <h4 class="mt-2" id="nombre"></h4><p class="text-muted" id="desc"></p>
+      </div>
+      <div class="corte"></div>
+      <div class="p-4">
+        <div class="d-flex justify-content-between small"><span class="text-muted">Factura</span><b id="fac"></b></div>
+        <div class="d-flex justify-content-between small mb-3"><span class="text-muted">Válida hasta</span><b id="vence"></b></div>
+        ${vencida ? '<div class="alert alert-danger py-2 text-center mb-0">Esta promoción ya venció</div>' : `
+        <p class="fw-semibold mb-1">¿Cómo canjearla?</p>
+        <ol class="pasos small ps-3 mb-3"><li>Presenta este código en caja en tu próxima compra.</li>
+        <li>El cajero lo escanea y aplica tu beneficio.</li><li>¡Disfruta tu ahorro!</li></ol>`}
+        <a href="./index.html" class="btn w-100 text-white" style="background:#9a4f93"><i class="bi bi-shop"></i> Visitar Las Casas del Escuintleco</a>
+      </div>`;
+        // textContent evita inyectar HTML desde la dirección
+        document.getElementById('tipo').textContent = info[1];
+        document.getElementById('nombre').textContent = p.get('n') || info[1];
+        document.getElementById('desc').textContent = p.get('d') || '';
+        document.getElementById('fac').textContent = '#' + p.get('f');
+        document.getElementById('vence').textContent = vence.toLocaleDateString('es-GT', { day: '2-digit', month: 'long', year: 'numeric' });
+    }
+</script>
+</body>
+</html>

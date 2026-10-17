@@ -1,0 +1,10 @@
+{
+  "name": "Las Casas del Escuintleco",
+  "short_name": "Casas Escuintleco",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#9a4f93",
+  "theme_color": "#9a4f93",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
